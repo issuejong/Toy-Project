@@ -1,6 +1,8 @@
 package com.practice.board_management.controller.post;
 
+import com.practice.board_management.domain.post.Post;
 import com.practice.board_management.dto.post.request.PostCreateRequest;
+import com.practice.board_management.dto.post.response.PostResponse;
 import com.practice.board_management.dto.post.response.eachByUser.PostEachByUserResponse;
 import com.practice.board_management.dto.post.response.entireUsers.PostEntireUsersResponse;
 import com.practice.board_management.service.post.PostService;
@@ -29,5 +31,15 @@ public class PostController {
     @GetMapping("/entire/{userId}")
     public PostEntireUsersResponse getPostByEntire(@PathVariable("userId") Long userId) {
         return postService.getPostByEntire(userId);
+    }
+
+    @GetMapping("/{postId}")
+    public PostResponse getPost(@PathVariable("postId") Long postId) {
+        return postService.getPost(postId);
+    }
+
+    @DeleteMapping("/{postId}")
+    public void deletePost(@PathVariable("postId") Long postId) {
+        postService.deletePost(postId);
     }
 }

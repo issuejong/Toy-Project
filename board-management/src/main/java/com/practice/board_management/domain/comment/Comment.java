@@ -28,6 +28,7 @@ public class Comment {
 
     private LocalDateTime time;
 
+
     public Comment(Post post, User author, String content) {
         this.post = post;
         this.author = author;

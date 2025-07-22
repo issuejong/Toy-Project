@@ -28,6 +28,8 @@ public class Post {
 
     private LocalDateTime createTime;
 
+    private int views;
+
     public Post(User author, String title, String content) {
         this.author = author;
         this.title = title;
@@ -39,9 +41,8 @@ public class Post {
 
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createTime = LocalDateTime.now();
+    public void viewsUp() {
+        this.views++;
     }
 
     @OneToMany(mappedBy = "post")

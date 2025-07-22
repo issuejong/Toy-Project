@@ -1,11 +1,14 @@
 package com.practice.board_management.service.post;
 
+import com.practice.board_management.domain.comment.CommentRepository;
 import com.practice.board_management.domain.post.Post;
 import com.practice.board_management.domain.post.PostRepository;
 import com.practice.board_management.domain.users.User;
 import com.practice.board_management.domain.users.UserRepository;
+import com.practice.board_management.dto.comment.response.CommentResponse;
 import com.practice.board_management.dto.post.request.PostCreateRequest;
 import com.practice.board_management.dto.post.response.PersonalPostResponse;
+import com.practice.board_management.dto.post.response.PostResponse;
 import com.practice.board_management.dto.post.response.eachByUser.PostEachByUserResponse;
 import com.practice.board_management.dto.post.response.entireUsers.PostEntireUsersResponse;
 import com.practice.board_management.dto.user.response.UserNicknameResponse;
@@ -22,10 +25,12 @@ public class PostService {
 
     PostRepository postRepository;
     UserRepository userRepository;
+    CommentRepository commentRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Transactional
@@ -89,4 +94,23 @@ public class PostService {
             responses.add(new PostEachByUserResponse(tempUser.getNickname(), response));
         }
         */
+
+    @Transactional
+    public PostResponse getPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        post.viewsUp();
+
+        return new PostResponse(post);
+    }
+
+    @Transactional
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        commentRepository.deleteAll(post.getComments());
+        postRepository.delete(post);
+    }
 }
