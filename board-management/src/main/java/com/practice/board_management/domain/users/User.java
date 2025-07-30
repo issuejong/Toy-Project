@@ -4,6 +4,7 @@ import com.practice.board_management.domain.comment.Comment;
 import com.practice.board_management.domain.post.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 1000)
     private String password;
 
     @Column(nullable = false, length = 20)
@@ -27,6 +28,25 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
     private Role role;
+
+    @Column(length = 1000)
+    private String refreshToken;
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void destroyRefreshToken() {
+        this.refreshToken = null;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
+
+    public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(this.password, password);
+    }
 
     public User() {
 

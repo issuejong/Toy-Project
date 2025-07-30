@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 public class UserCreateRequest {
 
-    private Long userId;
     private String password;
     private String nickname;
     private String email;
