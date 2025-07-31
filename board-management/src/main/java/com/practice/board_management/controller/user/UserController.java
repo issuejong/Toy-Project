@@ -4,6 +4,7 @@ import com.practice.board_management.dto.user.request.UserCreateRequest;
 import com.practice.board_management.dto.user.request.UserLoginRequest;
 import com.practice.board_management.dto.user.response.UserLoginResultResponse;
 import com.practice.board_management.dto.user.response.UserResponse;
+import com.practice.board_management.service.jwt.JwtService;
 import com.practice.board_management.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +15,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping
@@ -38,6 +41,14 @@ public class UserController {
     public UserLoginResultResponse login(@RequestBody UserLoginRequest request) {
         System.out.println("gd");
         return userService.login(request);
+    }
+
+    @PostMapping("/logout")
+    public void logout(@RequestHeader("Authorization") String accessToken) {
+        String email = jwtService.extractEmail(accessToken.replace("Bearer ", ""))
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 토큰"));
+
+        jwtService.destroyRefreshToken(email);
     }
 
 
