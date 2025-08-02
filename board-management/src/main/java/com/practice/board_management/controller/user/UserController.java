@@ -71,7 +71,7 @@ public class UserController {
                 .body("Access Token 재발급 완료");
     }
 
-    @GetMapping("/board/users/me")
+    @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return ResponseEntity.ok(userDetails.getUsername());

@@ -3,12 +3,15 @@ package com.practice.board_management.domain.post;
 import com.practice.board_management.domain.comment.Comment;
 import com.practice.board_management.domain.users.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Post {
 
@@ -35,10 +38,6 @@ public class Post {
         this.title = title;
         this.content = content;
         this.createTime = LocalDateTime.now();
-    }
-
-    public Post() {
-
     }
 
     public void viewsUp() {

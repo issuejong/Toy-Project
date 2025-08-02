@@ -34,10 +34,12 @@ public class PostService {
     }
 
     @Transactional
-    public void createPost(PostCreateRequest request, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(IllegalArgumentException::new);
-        Post post = new Post(user, request.getTitle(), request.getContent());
+    public void createPost(PostCreateRequest request, User user) {
+        Post post = Post.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .author(user)
+                .build();
         postRepository.save(post);
     }
 

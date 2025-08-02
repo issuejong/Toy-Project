@@ -2,13 +2,19 @@ package com.practice.board_management.controller.post;
 
 import com.practice.board_management.domain.post.Post;
 import com.practice.board_management.dto.post.request.PostCreateRequest;
+import com.practice.board_management.dto.post.response.PersonalPostResponse;
 import com.practice.board_management.dto.post.response.PostResponse;
 import com.practice.board_management.dto.post.response.eachByUser.PostEachByUserResponse;
 import com.practice.board_management.dto.post.response.entireUsers.PostEntireUsersResponse;
+import com.practice.board_management.service.jwt.UserDetailsImpl;
 import com.practice.board_management.service.post.PostService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/board/posts")
+import java.util.List;
+
+@RequestMapping("/board")
 @RestController
 public class PostController {
 
@@ -18,14 +24,9 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping
-    public void createPost(@RequestBody PostCreateRequest request, @RequestParam Long userId) {
-        postService.createPost(request, userId);
-    }
-
-    @GetMapping("/each/{userId}")
-    public PostEachByUserResponse getPostByPersonal(@PathVariable("userId") Long userId) {
-        return postService.getPostByPersonal(userId);
+    @PostMapping("users/me/posts")
+    public void createPost(@RequestBody PostCreateRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.createPost(request, userDetails.getUser());
     }
 
     @GetMapping("/entire/{userId}")
@@ -33,9 +34,9 @@ public class PostController {
         return postService.getPostByEntire(userId);
     }
 
-    @GetMapping("/{postId}")
-    public PostResponse getPost(@PathVariable("postId") Long postId) {
-        return postService.getPost(postId);
+    @GetMapping("/users/me/posts")
+    public PostEachByUserResponse getPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getPostByPersonal(userDetails.getUser().getUserId());
     }
 
     @DeleteMapping("/{postId}")

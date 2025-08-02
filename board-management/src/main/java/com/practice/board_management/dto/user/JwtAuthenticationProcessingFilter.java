@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
@@ -27,7 +28,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();//5
 
-    private final String NO_CHECK_URL = "/login";//1
+    private final String NO_CHECK_URL = "/board/users/login";//1
 
     /**
      * 1. 리프레시 토큰이 오는 경우 -> 유효하면 AccessToken 재발급후, 필터 진행 X, 바로 튕기기
@@ -56,18 +57,28 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     }
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        jwtService.extractAccessToken(request).filter(jwtService::isTokenValid).ifPresent(
+        String accessToken = jwtService.extractAccessToken(request).orElse(null);
 
-                accessToken -> jwtService.extractEmail(accessToken).ifPresent(
+        if (accessToken == null || !jwtService.isTokenValid(accessToken)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("AccessToken 누락 또는 유효하지 않음");
+            return;
+        }
 
-                        email -> userRepository.findByEmail(email).ifPresent(
+        Optional<String> email = jwtService.extractEmail(accessToken);
+        if (email.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
-                                users -> saveAuthentication(users)
-                        )
-                )
-        );
+        Optional<User> user = userRepository.findByEmail(email.get());
+        if (user.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
-        filterChain.doFilter(request,response);
+        saveAuthentication(user.get());
+        filterChain.doFilter(request, response);
     }
 
 
