@@ -29,18 +29,13 @@ public class PostController {
         postService.createPost(request, userDetails.getUser());
     }
 
-    @GetMapping("/entire/{userId}")
-    public PostEntireUsersResponse getPostByEntire(@PathVariable("userId") Long userId) {
-        return postService.getPostByEntire(userId);
-    }
-
     @GetMapping("/users/me/posts")
     public PostEachByUserResponse getPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.getPostByPersonal(userDetails.getUser().getUserId());
     }
 
-    @DeleteMapping("/{postId}")
-    public void deletePost(@PathVariable("postId") Long postId) {
-        postService.deletePost(postId);
+    @DeleteMapping("/users/me/{postId}")
+    public void deletePost(@PathVariable("postId") Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePost(postId, userDetails.getUser());
     }
 }

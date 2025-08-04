@@ -108,7 +108,10 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, User user) {
+        userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 

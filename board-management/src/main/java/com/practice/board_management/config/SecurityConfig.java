@@ -11,6 +11,7 @@ import com.practice.board_management.service.user.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -40,7 +41,13 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/board/users/signup", "/board/users/login", "/board/users/reissue", "/board/users/me").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/board/posts/*/comments").permitAll()
+                        .requestMatchers("/board/users/signup",
+                                "/board/users/login",
+                                "/board/users/reissue",
+                                "/board/users/me",
+                                "/board/users/email-verification/send",
+                                "/board/users/email-verification/confirm").permitAll()
                         .anyRequest().authenticated())
 //				.formLogin(formLogin -> formLogin
 //						.loginPage("/login")

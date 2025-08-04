@@ -27,8 +27,8 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public void createComment(Long postId, CommentCreateRequest request) {
-        User user = userRepository.findById(request.getUserId())
+    public void createComment(Long postId, User user, CommentCreateRequest request) {
+        userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
 
         Post post = postRepository.findById(postId)
@@ -51,6 +51,13 @@ public class CommentService {
         return  grouped.entrySet().stream()
                 .map(e -> new CommentResponse(e.getKey().getNickname(), e.getValue()))
                 .toList();
+    }
+
+    public void deleteComment(Long commentId, User user) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+
+        commentRepository.delete(comment);
     }
 
 }

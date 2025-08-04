@@ -19,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
@@ -28,7 +29,12 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();//5
 
-    private final String NO_CHECK_URL = "/board/users/login";//1
+    private static final Set<String> NO_CHECK_URLS = Set.of(
+            "/board/users/login",
+            "/board/users/signup",
+            "/board/users/email-verification/send",
+            "/board/users/email-verification/confirm"
+    );
 
     /**
      * 1. 리프레시 토큰이 오는 경우 -> 유효하면 AccessToken 재발급후, 필터 진행 X, 바로 튕기기
@@ -37,9 +43,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getRequestURI().equals(NO_CHECK_URL)) {
+        if (NO_CHECK_URLS.contains(request.getRequestURI())) {
             filterChain.doFilter(request, response);
-            return;//안해주면 아래로 내려가서 계속 필터를 진행하게됨
+            return;
         }
 
         String refreshToken = jwtService
