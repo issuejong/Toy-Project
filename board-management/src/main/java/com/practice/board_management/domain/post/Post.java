@@ -46,4 +46,10 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
+
+    public void modify(String title, String content) {
+        this.title = title;
+        this.content = content;
+
+    }
 }

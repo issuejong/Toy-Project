@@ -7,12 +7,14 @@ import com.practice.board_management.domain.users.User;
 import com.practice.board_management.domain.users.UserRepository;
 import com.practice.board_management.dto.comment.response.CommentResponse;
 import com.practice.board_management.dto.post.request.PostCreateRequest;
+import com.practice.board_management.dto.post.request.PostModifyRequest;
 import com.practice.board_management.dto.post.response.PersonalPostResponse;
 import com.practice.board_management.dto.post.response.PostResponse;
 import com.practice.board_management.dto.post.response.eachByUser.PostEachByUserResponse;
 import com.practice.board_management.dto.post.response.entireUsers.PostEntireUsersResponse;
 import com.practice.board_management.dto.user.response.UserNicknameResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -117,5 +119,17 @@ public class PostService {
 
         commentRepository.deleteAll(post.getComments());
         postRepository.delete(post);
+    }
+
+    @Transactional
+    public void modifyPost(User user, Long postId, PostModifyRequest request) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        if (!post.getAuthor().getUserId().equals(user.getUserId())) {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
+
+        post.modify(request.getTitle(), request.getContent());
     }
 }

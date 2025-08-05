@@ -2,6 +2,7 @@ package com.practice.board_management.controller.post;
 
 import com.practice.board_management.domain.post.Post;
 import com.practice.board_management.dto.post.request.PostCreateRequest;
+import com.practice.board_management.dto.post.request.PostModifyRequest;
 import com.practice.board_management.dto.post.response.PersonalPostResponse;
 import com.practice.board_management.dto.post.response.PostResponse;
 import com.practice.board_management.dto.post.response.eachByUser.PostEachByUserResponse;
@@ -32,6 +33,11 @@ public class PostController {
     @GetMapping("/users/me/posts")
     public PostEachByUserResponse getPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.getPostByPersonal(userDetails.getUser().getUserId());
+    }
+
+    @PutMapping("/users/me/{postId}")
+    public void modifyPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("postId") Long postId, @RequestBody PostModifyRequest request) {
+        postService.modifyPost(userDetails.getUser(), postId, request);
     }
 
     @DeleteMapping("/users/me/{postId}")
