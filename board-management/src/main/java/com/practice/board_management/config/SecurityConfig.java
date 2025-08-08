@@ -37,9 +37,9 @@ public class SecurityConfig {
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http	.csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
+        http	.csrf(AbstractHttpConfigurer::disable)          //csrf 비활성화
+                .httpBasic(AbstractHttpConfigurer::disable)     //브라우저 팝업 로그인창 비활성화
+                .formLogin(AbstractHttpConfigurer::disable)     //스프링 기본 로그인 폼 비활성화
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.GET, "/board/posts/*/comments").permitAll()
                         .requestMatchers("/board/users/signup",
@@ -47,21 +47,21 @@ public class SecurityConfig {
                                 "/board/users/reissue",
                                 "/board/users/me",
                                 "/board/users/email-verification/send",
-                                "/board/users/email-verification/confirm").permitAll()
-                        .anyRequest().authenticated())
+                                "/board/users/email-verification/confirm").permitAll() //이 URL들은 허용
+                        .anyRequest().authenticated()) //나머지는 인증 필요
 //				.formLogin(formLogin -> formLogin
 //						.loginPage("/login")
 //						.defaultSuccessUrl("/home"))
-                .logout((logout) -> logout
+                .logout((logout) -> logout // 로그아웃시 이동할 URL 지정
                         .logoutSuccessUrl("/board/users/login")
                         .invalidateHttpSession(true))
-                .sessionManagement(session -> session
+                .sessionManagement(session -> session // 세션 생성 비활성화
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
-        http
-                .addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class) // 추가 : 커스터마이징 된 필터를 SpringSecurityFilterChain에 등록
-                .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonUsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        http //커스텀 필터 등록
+                .addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class) //로그인 요청 처리 필터
+                .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonUsernamePasswordAuthenticationFilter.class); //모든 요청에서 JWT 검증 필요
+        return http.build(); // 설정 완료 후 SecurityFilterChain 객체 반환
     }
 
     // 인증 관리자 관련 설정
