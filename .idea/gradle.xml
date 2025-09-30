@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/board-management" />
+            <option value="$PROJECT_DIR$/community" />
             <option value="$PROJECT_DIR$/commute-app" />
             <option value="$PROJECT_DIR$/library-app" />
           </set>

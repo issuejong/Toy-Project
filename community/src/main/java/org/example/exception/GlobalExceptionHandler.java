@@ -5,6 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,5 +39,26 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    /**
+     * MisMatch Error
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorResponse> handleMisMatchException(MethodArgumentTypeMismatchException e) {
+        Class<?> required = e.getRequiredType();
+        String param = e.getName();
+        String value = String.valueOf(e.getValue());
+
+        String allowed = Arrays.stream(required.getEnumConstants())
+                .map(Object::toString)
+                .collect(Collectors.joining("Backend, Infra, Database"));
+
+        ErrorResponse body = new ErrorResponse(
+                400,
+                "INVALID_ENUM_VALUE",
+                "올바른 태그를 입력해주세요."
+        );
+        return ResponseEntity.badRequest().body(body);
     }
 }

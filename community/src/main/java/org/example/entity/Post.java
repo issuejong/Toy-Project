@@ -3,6 +3,7 @@ package org.example.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
@@ -21,11 +22,15 @@ public class Post {
     private String title;
 
     @Column(length = 1000)
-    @NotNull
+    @NotBlank
     private String content;
+
+    @Enumerated(EnumType.STRING)
+    private Tag tag;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotBlank
     private User user;
 
     @OneToMany(mappedBy = "post")
@@ -35,10 +40,15 @@ public class Post {
 
     }
 
-    public Post(String title, String content, User user) {
+    public Post(String title, String content, Tag tag, User user) {
         this.title = title;
         this.content = content;
+        this.tag = tag;
         this.user = user;
+    }
+
+    public enum Tag {
+        Backend, Database, Infra;
     }
 
     public void update(String title, String content) {

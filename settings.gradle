@@ -2,3 +2,4 @@ rootProject.name = "Toy-Project"
 include("board-management")
 include("commute-app")
 include("library-app")
+include("community")

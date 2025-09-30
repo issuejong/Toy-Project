@@ -12,14 +12,28 @@
         <module name="Toy-Project.board-management.main" />
         <module name="Toy-Project.board-management.test" />
       </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.30/f195ee86e6c896ea47a1d39defbe20eb59cd149d/lombok-1.18.30.jar" />
+        </processorPath>
+        <module name="Toy-Project.community.main" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.6" />
+    <bytecodeTargetLevel target="1.6">
+      <module name="board-management" target="17" />
+      <module name="board-management.main" target="17" />
+      <module name="board-management.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Toy-Project.board-management" options="-parameters" />
       <module name="Toy-Project.board-management.main" options="-parameters" />
       <module name="Toy-Project.board-management.test" options="-parameters" />
+      <module name="Toy-Project.community" options="-parameters" />
+      <module name="Toy-Project.community.main" options="-parameters" />
+      <module name="Toy-Project.community.test" options="-parameters" />
       <module name="Toy-Project.commute-app" options="-parameters" />
       <module name="Toy-Project.commute-app.main" options="-parameters" />
       <module name="Toy-Project.commute-app.test" options="-parameters" />

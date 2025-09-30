@@ -1,10 +1,10 @@
 package org.example.post.controller;
 
 import jakarta.validation.Valid;
+import org.example.entity.Post;
 import org.example.post.dto.request.PostUpdateRequest;
 import org.example.post.dto.response.PostAllResponse;
 import org.example.post.dto.request.PostRequest;
-import org.example.post.dto.response.PostSearchByKeywordResponse;
 import org.example.post.dto.response.PostDetailReponse;
 import org.example.post.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -28,30 +28,40 @@ public class PostController {
         return ResponseEntity.ok().body("게시글이 작성되었습니다.");
     }
 
+    @PatchMapping("/post/{postId}")
+    public ResponseEntity<String> updatePostTitle(@PathVariable("postId") Long postId, @RequestBody PostUpdateRequest postUpdateRequest) {
+        postService.updatePost(postId, postUpdateRequest);
+        return ResponseEntity.ok().body("게시글이 수정되었습니다.");
+    }
+
     @GetMapping("/post")
     public ResponseEntity<List<PostAllResponse>> getAllPosts() {
         return ResponseEntity.ok().body(postService.getAllPosts());
     }
 
-    @GetMapping("/{postId}/post")
+    @GetMapping("/post/{postId}")
     public ResponseEntity<PostDetailReponse> getPostById(@PathVariable("postId") Long postId) {
-        return ResponseEntity.ok().body(postService.getPost(postId));
+        return ResponseEntity.ok().body(postService.getDetailPost(postId));
     }
 
-    @PatchMapping("/{postId}/post")
-    public ResponseEntity<String> updatePostTitle(@PathVariable("postId") Long postId, @RequestBody PostUpdateRequest postUpdateRequest) {
-        postService.updatePostTitle(postId, postUpdateRequest);
-        return ResponseEntity.ok().body("게시글이 수정되었습니다.");
-    }
-
-    @DeleteMapping("/{postId}/post")
+    @DeleteMapping("/post/{postId}")
     public ResponseEntity<String> deletePostById(@PathVariable("postId") Long postId) {
         postService.deletePostById(postId);
         return ResponseEntity.ok().body("게시글이 삭제되었습니다.");
     }
 
-    @GetMapping("post/{keyword}")
-    public PostSearchByKeywordResponse searchPostsByKeyword(@PathVariable("keyword") String keyword) {
-        return postService.searchPostsByKeyword(keyword);
+    @GetMapping("post/search/title/{Title}")
+    public ResponseEntity<List<PostAllResponse>> searchPostsByTitle(@PathVariable("Title") String Title) {
+        return ResponseEntity.ok().body(postService.searchPostsByTitle(Title));
+    }
+
+    @GetMapping("post/search/nickname/{Nickname}")
+    public ResponseEntity<List<PostAllResponse>> searchPostsByNickname(@PathVariable("Nickname") String Nickname) {
+        return ResponseEntity.ok().body(postService.searchPostsByNickname(Nickname));
+    }
+
+    @GetMapping("post/search/tag/{Tag}")
+    public ResponseEntity<List<PostAllResponse>> searchPostsByTag(@PathVariable("Tag")Post.Tag tag) {
+        return ResponseEntity.ok().body(postService.searchPostsByTag(tag));
     }
 }

@@ -4,9 +4,11 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/board-management/Toy-Project.board-management.main.iml" filepath="$PROJECT_DIR$/.idea/modules/board-management/Toy-Project.board-management.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/board-management/Toy-Project.board-management.test.iml" filepath="$PROJECT_DIR$/.idea/modules/board-management/Toy-Project.board-management.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/community/Toy-Project.community.main.iml" filepath="$PROJECT_DIR$/.idea/modules/community/Toy-Project.community.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/commute-app/Toy-Project.commute-app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/commute-app/Toy-Project.commute-app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/board-management.main.iml" filepath="$PROJECT_DIR$/.idea/modules/board-management.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/board-management.test.iml" filepath="$PROJECT_DIR$/.idea/modules/board-management.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/commute-app/Toy-Project.commute-app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/commute-app/Toy-Project.commute-app.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-app/Toy-Project.library-app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/library-app/Toy-Project.library-app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-app/Toy-Project.library-app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/library-app/Toy-Project.library-app.test.iml" />
     </modules>
   </component>
 </project>
